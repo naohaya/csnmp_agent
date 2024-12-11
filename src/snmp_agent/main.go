@@ -17,19 +17,19 @@ func main() {
 	g.Community = "public"
 	g.Version = gosnmp.Version2c
 	//	g.Logger := log.New(os.Stdout, "", log.LstdFlags)
-	a := &gosnmp.GoSNMPAgent{
+	agent := &gosnmp.GoSNMPAgent{
 		Port:   161,
 		IPAddr: "0.0.0.0",
 		Logger: g.Logger,
 		Snmp:   g,
 	}
 
-	a.AddMibList(".1.3.6.1.2.1.1.1.0", gosnmp.OctetString, getSysDescr)
+	agent.AddMibList(".1.3.6.1.2.1.1.1.0", gosnmp.OctetString, getSysDescr)
 
 	// サーバーを起動
 	go func() {
 		log.Println("Starting SNMP Agent...")
-		if err := a.Start(); err != nil {
+		if err := agent.Start(); err != nil {
 			log.Fatalf("Error starting SNMP Agent: %v", err)
 		}
 	}()
