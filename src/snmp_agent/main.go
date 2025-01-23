@@ -24,7 +24,8 @@ func main() {
 		Snmp:   g,
 	}
 
-	agent.AddMibList(".1.3.6.1.2.1.1.1.0", gosnmp.OctetString, getSysDescr)
+	// MIB の初期化
+	initMib(agent)
 
 	// サーバーを起動
 	go func() {
@@ -41,6 +42,10 @@ func main() {
 	<-sigs
 
 	log.Println("Shutting down SNMP Agent...")
+}
+
+func initMib(a *GoSNMPAgent) {
+	a.AddMibList(".1.3.6.1.2.1.1.1.0", gosnmp.OctetString, getSysDescr)
 }
 
 func getSysDescr(oid string) interface{} {
