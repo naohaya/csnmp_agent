@@ -8,6 +8,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 	"os/signal"
 	"syscall"
 
@@ -20,7 +21,17 @@ func main() {
 	g := &gosnmp.GoSNMP{}
 	g.Port = 161
 	g.Community = "public"
-	g.Version = gosnmp.Version2c
+	g.Version = gosnmp.Version3
+	g.SecurityModel = gosnmp.UserSecurityModel
+	g.MsgFlags = gosnmp.AuthPrev
+	g.Timeout = time.Duration(30) * time.Second
+	g.SecurityParameters = &gosnmp.UsmSecurityParameters{ // not in gosnmp
+		UserName: "user", 
+		AuthenticationProtocol: gosnmp.SHA,
+		AuthenticationPassphrase: "password",
+        PrivacyProtocol:          g.DES,
+        PrivacyPassphrase:        "password",
+	}
 	//	g.Logger := log.New(os.Stdout, "", log.LstdFlags)
 	agent := &gosnmp.GoSNMPAgent{
 		Port:   161,
