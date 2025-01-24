@@ -44,7 +44,7 @@ func main() {
 	log.Println("Shutting down SNMP Agent...")
 }
 
-func initMib(a *GoSNMPAgent) {
+func initMib(a *gosnmp.GoSNMPAgent) {
 	a.AddMibList(".1.3.6.1.2.1.1.1.0", gosnmp.OctetString, getSysDescr)
 }
 
