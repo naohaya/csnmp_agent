@@ -54,14 +54,13 @@ func main() {
 	log.Println("Shutting down SNMP Agent...")
 }
 
-// function for responding requests
-func getSysDescr(oid string) interface{} {
-	plaintext := []byte("test")
+func sealing(result string) string {
+	plaintext := []byte(result)
 	// create a new AES cipher block
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return ""
 	}
 
 	// create a new CFB encrypter
@@ -70,14 +69,33 @@ func getSysDescr(oid string) interface{} {
 	cfb.XORKeyStream(ciphertext, plaintext)
 	fmt.Printf("%s => %x\n", plaintext, ciphertext)
 
-	// create a new CFB decrypter
-	cfbdec := cipher.NewCFBDecrypter(c, commonIV)
-	plaintextCopy := make([]byte, len(plaintext))
-	cfbdec.XORKeyStream(plaintextCopy, ciphertext)
-	fmt.Printf("%x => %s\n", ciphertext, plaintextCopy)
-
-	//	return "test"
 	return string(ciphertext)
+}
+
+// function for responding requests
+func getSysDescr(oid string) interface{} {
+	//	plaintext := []byte("test")
+	// create a new AES cipher block
+	/*	c, err := aes.NewCipher(key)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		// create a new CFB encrypter
+		cfb := cipher.NewCFBEncrypter(c, commonIV)
+		ciphertext := make([]byte, len(plaintext))
+		cfb.XORKeyStream(ciphertext, plaintext)
+		fmt.Printf("%s => %x\n", plaintext, ciphertext)
+
+		// create a new CFB decrypter
+		cfbdec := cipher.NewCFBDecrypter(c, commonIV)
+		plaintextCopy := make([]byte, len(plaintext))
+		cfbdec.XORKeyStream(plaintextCopy, ciphertext)
+		fmt.Printf("%x => %s\n", ciphertext, plaintextCopy)
+	*/
+	//	return "test"
+	return sealing("test")
 }
 
 func getSysObjectID(oid string) interface{} {
